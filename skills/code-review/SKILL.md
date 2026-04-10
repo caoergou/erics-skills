@@ -36,7 +36,20 @@ Comprehensive code review skill that combines **Clean Code** principles (Robert 
 - **Large diff (>500 lines)**: Summarize by file first, then review in batches by module/feature area.
 - **Mixed concerns**: Group findings by logical feature, not just file order.
 
-### 2) Clean Code Principles
+### 2) Linter Zero-New-Violations Check
+
+- Load `references/linter-checklist.md` for detection and baseline strategy.
+- **Detect project linters**: Scan for config files (`.eslintrc*`, `pyproject.toml`, `.golangci.yml`, `Cargo.toml`, etc.) to identify which linters are configured.
+- **Run linters on changed files only**: Use `git diff --name-only --diff-filter=ACMR HEAD` to get changed files, then run the detected linter(s) targeting those files.
+- **Baseline comparison**: Cross-reference linter output with diff hunks — only report violations on changed/added lines. Pre-existing violations in unchanged code are out of scope.
+- **Classification**:
+  - New **error** in changed line → **P1** (must fix before merge)
+  - New **warning** in changed line → **P2** (should fix in this PR)
+  - Formatter-only issues → **P3** (suggest auto-fix command)
+- If auto-fix is available (e.g., `eslint --fix`, `ruff check --fix`), mention the command in the suggested fix.
+- If no linter is detected, skip this step and note it in the review output.
+
+### 3) Clean Code Principles
 
 Apply the following Clean Code principles during review:
 
@@ -72,7 +85,7 @@ Apply the following Clean Code principles during review:
 - **Use Exceptions instead of Return Codes**.
 - **Don't Return/Pass Null**.
 
-### 3) SOLID + Architecture Smells
+### 4) SOLID + Architecture Smells
 
 - Load `references/solid-checklist.md` for specific prompts.
 - Look for:
@@ -84,14 +97,14 @@ Apply the following Clean Code principles during review:
 - When you propose a refactor, explain *why* it improves cohesion/coupling and outline a minimal, safe split.
 - If refactor is non-trivial, propose an incremental plan instead of a large rewrite.
 
-### 4) Removal Candidates + Iteration Plan
+### 5) Removal Candidates + Iteration Plan
 
 - Load `references/removal-plan.md` for template.
 - Identify code that is unused, redundant, or feature-flagged off.
 - Distinguish **safe delete now** vs **defer with plan**.
 - Provide a follow-up plan with concrete steps and checkpoints (tests/metrics).
 
-### 5) Security and Reliability Scan
+### 6) Security and Reliability Scan
 
 - Load `references/security-checklist.md` for coverage.
 - Check for:
@@ -103,7 +116,7 @@ Apply the following Clean Code principles during review:
   - **Race conditions**: concurrent access, check-then-act, TOCTOU, missing locks
 - Call out both **exploitability** and **impact**.
 
-### 6) Code Quality Scan
+### 7) Code Quality Scan
 
 - Load `references/code-quality-checklist.md` for coverage.
 - Check for:
@@ -112,7 +125,7 @@ Apply the following Clean Code principles during review:
   - **Boundary conditions**: null/undefined handling, empty collections, numeric boundaries, off-by-one
 - Flag issues that may cause silent failures or production incidents.
 
-### 7) Output Format
+### 8) Output Format
 
 Structure your review as follows:
 
@@ -143,6 +156,11 @@ Structure your review as follows:
 
 ---
 
+## Linter Results
+**Linters detected**: [list or "none"]
+**New violations in changed lines**: X errors, Y warnings
+(list each violation with file:line, rule, and auto-fix command if available)
+
 ## Clean Code Issues
 (naming, function size, comment quality, formatting — grouped by principle)
 
@@ -165,7 +183,7 @@ Description of the issue and suggested fix.
 - Any areas not covered (e.g., "Did not verify database migrations")
 - Residual risks or recommended follow-up tests
 
-### 8) Next Steps Confirmation
+### 9) Next Steps Confirmation
 
 After presenting findings, ask user how to proceed:
 
@@ -205,6 +223,7 @@ Please choose an option or provide specific instructions.
 
 | File | Purpose |
 |------|---------|
+| `linter-checklist.md` | Linter detection, baseline comparison, and auto-fix commands |
 | `solid-checklist.md` | SOLID smell prompts, common code smells, and refactor heuristics |
 | `security-checklist.md` | Web/app security and runtime risk checklist |
 | `code-quality-checklist.md` | Error handling, performance, boundary conditions |

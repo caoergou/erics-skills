@@ -10,6 +10,7 @@ npx skills add caoergou/erics-skills --skill code-review
 
 ## Features
 
+- **Linter Zero-New-Violations** - Auto-detect project linters, ensure changes introduce no new warnings/errors
 - **Clean Code Principles** - Meaningful names, small functions, comment hygiene, formatting
 - **SOLID Principles** - Detect SRP, OCP, LSP, ISP, DIP violations
 - **Security Scan** - XSS, injection, SSRF, race conditions, auth gaps, secrets leakage
@@ -31,13 +32,14 @@ The skill will automatically review your current git changes.
 ## Workflow
 
 1. **Preflight** - Scope changes via `git diff`
-2. **Clean Code** - Check naming, function size, comments, formatting
-3. **SOLID + Architecture** - Check design principles
-4. **Removal Candidates** - Find dead/unused code
-5. **Security Scan** - Vulnerability detection
-6. **Code Quality** - Error handling, performance, boundaries
-7. **Output** - Findings by severity (P0-P3)
-8. **Confirmation** - Ask user before implementing fixes
+2. **Linter Check** - Detect linters, run on changed files, flag new violations
+3. **Clean Code** - Check naming, function size, comments, formatting
+4. **SOLID + Architecture** - Check design principles
+5. **Removal Candidates** - Find dead/unused code
+6. **Security Scan** - Vulnerability detection
+7. **Code Quality** - Error handling, performance, boundaries
+8. **Output** - Findings by severity (P0-P3)
+9. **Confirmation** - Ask user before implementing fixes
 
 ## Severity Levels
 
@@ -57,6 +59,7 @@ code-review/
 ├── agents/
 │   └── agent.yaml               # Agent interface config
 └── references/
+    ├── linter-checklist.md      # Linter detection & baseline comparison
     ├── solid-checklist.md       # SOLID smell prompts + common code smells
     ├── security-checklist.md    # Security & reliability
     ├── code-quality-checklist.md # Error, perf, boundaries
