@@ -1,0 +1,7 @@
+interface:
+  display_name: "Code Review"
+  short_description: "Comprehensive code review: Clean Code principles, SOLID, security, performance, error handling"
+  default_prompt: "Review current git changes for clean code issues, SOLID violations, security risks, race conditions, error handling problems, performance issues, and boundary condition bugs."
+
+# Agent-agnostic skill - works with any LLM provider.
+# No provider-specific configuration required.
