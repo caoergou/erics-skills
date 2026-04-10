@@ -7,6 +7,7 @@ A curated collection of AI agent skills for [Claude Code](https://docs.anthropic
 | Skill | Description | Install |
 |-------|-------------|---------|
 | [code-review](skills/code-review/) | Comprehensive code review: Clean Code + SOLID + linter + security + senior engineer expertise | `npx skills add caoergou/erics-skills --skill code-review` |
+| [skill-scout](skills/skill-scout/) | Scan the full skills ecosystem (skills.sh, ClawHub, Loaditout, AgentSkillsHub, LobeHub, OpenForge, GitHub) for trending skills across all domains, with security assessments | `npx skills add caoergou/erics-skills --skill skill-scout` |
 
 ## Installation
 
@@ -52,6 +53,7 @@ MIT
 | 技能 | 描述 | 安装 |
 |------|------|------|
 | [code-review](skills/code-review/) | 综合代码审查：Clean Code 原则 + SOLID 分析 + Linter 检查 + 安全扫描 + 资深工程师视角 | `npx skills add caoergou/erics-skills --skill code-review` |
+| [skill-scout](skills/skill-scout/) | 全生态技能发现：扫描 skills.sh、ClawHub、Loaditout、AgentSkillsHub、LobeHub、OpenForge、GitHub 等平台的热门技能，覆盖所有领域，含安全评估 | `npx skills add caoergou/erics-skills --skill skill-scout` |
 
 ## 安装
 
