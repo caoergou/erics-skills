@@ -8,6 +8,7 @@ A curated collection of AI agent skills for [Claude Code](https://docs.anthropic
 |-------|-------------|---------|
 | [code-review](skills/code-review/) | Comprehensive code review: Clean Code + SOLID + linter + security + senior engineer expertise | `npx skills add caoergou/erics-skills --skill code-review` |
 | [skill-scout](skills/skill-scout/) | Scan the full skills ecosystem (skills.sh, ClawHub, Loaditout, AgentSkillsHub, LobeHub, OpenForge, GitHub) for trending skills across all domains, with security assessments | `npx skills add caoergou/erics-skills --skill skill-scout` |
+| [ai-digest](skills/ai-digest/) | Weekly AI x Dev x Agent intelligence briefing. Curates trending topics from HN, GitHub, Reddit & curated newsletters into a Chinese-language digest with analyst commentary | `npx skills add caoergou/erics-skills --skill ai-digest` |
 
 ## Installation
 
@@ -54,6 +55,7 @@ MIT
 |------|------|------|
 | [code-review](skills/code-review/) | 综合代码审查：Clean Code 原则 + SOLID 分析 + Linter 检查 + 安全扫描 + 资深工程师视角 | `npx skills add caoergou/erics-skills --skill code-review` |
 | [skill-scout](skills/skill-scout/) | 全生态技能发现：扫描 skills.sh、ClawHub、Loaditout、AgentSkillsHub、LobeHub、OpenForge、GitHub 等平台的热门技能，覆盖所有领域，含安全评估 | `npx skills add caoergou/erics-skills --skill skill-scout` |
+| [ai-digest](skills/ai-digest/) | AI × 开发 × Agent 周报：从 HN、GitHub、Reddit 及策展新闻源抓取本周热点，输出中文简报含深度点评与原始链接 | `npx skills add caoergou/erics-skills --skill ai-digest` |
 
 ## 安装
 
