@@ -117,17 +117,69 @@ When a topic was previously covered and has new developments:
 
 ## File Saving Rules
 
-After outputting to terminal:
+After outputting to terminal, produce **two versions** of the digest:
 
-1. Save the full digest as **Markdown** to the current working directory
+### Local File (Standard Markdown)
+
+1. Save the full digest as **standard Markdown** to the current working directory
 2. Filename format: `ai-digest-{YYYY-MM-DD}.md` (use the date of the Monday of the current week)
 3. Confirm the file path to the user
+
+### Feishu Document (Lark-flavored Markdown)
+
+1. Convert the digest content to **Lark-flavored Markdown** (see below for enhancement rules)
+2. Title format: `AI × 开发 × Agent 周报 | {YYYY-MM-DD}` (Monday of current week)
+3. Save to Feishu personal knowledge library using:
+   ```bash
+   lark-cli docs +create \
+     --title "AI × 开发 × Agent 周报 | {monday_date}" \
+     --wiki-space my_library \
+     --markdown '{lark_flavored_content}'
+   ```
+4. If the current week's digest already exists in Feishu, follow user's prior decision (overwrite / append / skip)
+5. Confirm the Feishu document URL to the user
+
+> For full Feishu integration details, error handling, and command reference, see [`lark-integration.md`](lark-integration.md).
+
+### Lark-flavored Markdown Enhancements
+
+When writing to Feishu, enhance the standard Markdown with Lark-specific formatting. **Only apply to the Feishu version — the local file remains standard Markdown.**
+
+| Standard Markdown | Lark-flavored Enhancement |
+|-------------------|---------------------------|
+| Header block (date + stats) | Wrap in `<callout emoji="📅" background-color="light-blue">` |
+| `🔥 本周最热` section | Use `<callout emoji="🔥" background-color="light-red">` for each top item |
+| 👍 和 👎 bullet points | Use `<grid cols="2">` for side-by-side comparison |
+| Source links `[→ 原文](url)` | Keep as standard links (no change needed) |
+| Section dividers `---` | Keep as standard dividers (no change needed) |
+| Emoji in headings (🔥🤖🛠💡⚡📖) | **Keep as-is** — Feishu supports emoji in headings |
+
+Example — 👍👎 as grid:
+
+```html
+<grid cols="2">
+<column>
+
+👍 **值得点**
+- 轻量无重依赖
+- 5 分钟 Hello World
+
+</column>
+<column>
+
+👎 **需注意**
+- 文档不全（~60%）
+- 测试覆盖率低
+
+</column>
+</grid>
+```
 
 ---
 
 ## Follow-up Options
 
-After the digest is saved, offer:
+After the digest is saved (both locally and to Feishu), offer:
 
 ```markdown
 ---
@@ -137,5 +189,5 @@ After the digest is saved, offer:
 1. **深挖** — 选择某条新闻，获取更详细的信息和背景
 2. **对比** — 对比 2-3 个项目/框架的优劣
 3. **搜索** — 针对某个话题深入搜索更多内容
-4. **分享** — 将简报保存到飞书文档或发送到飞书群
+4. **更新飞书** — 将最新内容重新推送或更新到飞书文档
 ```

@@ -97,13 +97,27 @@ $OPENCLI_CMD reddit hot --limit 5 -f json  # Works with Xvfb
 
 **0b. Read Previous Digests** (Memory):
 
-1. Scan current working directory for `ai-digest-*.md` files
-2. Read all found digest files to extract previously covered topics
-3. Build a **Coverage Memory** — list of topics, projects, and URLs already reported
-4. During Steps 1-3, flag overlapping topics:
+1. **Local scan**: Scan current working directory for `ai-digest-*.md` files
+2. **Feishu scan**: Search Feishu personal library for historical digests:
+   ```bash
+   lark-cli docs +search \
+     --query 'intitle:"AI × 开发 × Agent 周报"' \
+     --filter '{"only_title":true}' \
+     --format json
+   ```
+3. For each Feishu digest found, fetch content:
+   ```bash
+   lark-cli docs +fetch --doc <doc_token> --format json
+   ```
+4. Build a **Coverage Memory** — merge topics from local files AND Feishu docs:
+   - If same topic appears in both local and Feishu → merge into single entry (Feishu is source of truth)
+   - For current week's digest already in Feishu → prompt user: overwrite / append / skip (see `references/lark-integration.md`)
+5. During Steps 1-3, flag overlapping topics:
    - **Identical topic** → SKIP unless significant new development this week
    - **Similar topic** → Mark as **🔄 Update**, write as supplement referencing prior digest date
    - **New topic** → Proceed normally
+
+> **Feishu prerequisite**: Ensure `lark-cli auth login` is done. If Feishu operations fail, fall back to local-only mode. See `references/lark-integration.md` for full details.
 
 **Update format** (see `references/output-template.md` for full template):
 ```
@@ -199,16 +213,39 @@ Every item must also include 👍 (值得点) and 👎 (需注意) with verifiab
 
 **Output Format**: See **`references/output-template.md`** for the complete Markdown template.
 
-**File Saving**:
-1. Save the full digest as Markdown to the current working directory
+**File Saving** (two versions required):
+
+| Version | Format | Location | Purpose |
+|---------|--------|----------|---------|
+| Local | Standard Markdown | Current working directory as `ai-digest-{YYYY-MM-DD}.md` | Local copy, Coverage Memory source |
+| Feishu | Lark-flavored Markdown | Personal knowledge library (`--wiki-space my_library`) | Published version, shareable |
+
+**Local save:**
+1. Save standard Markdown to current working directory
 2. Filename: `ai-digest-{YYYY-MM-DD}.md` (Monday's date of current week)
 3. Confirm the file path to the user
+
+**Feishu save:**
+
+1. Convert content to Lark-flavored Markdown (see `references/lark-integration.md` for enhancement rules)
+2. Title: `AI × 开发 × Agent 周报 | {YYYY-MM-DD}` (Monday's date)
+3. If no existing digest for this week → **Create new**:
+   ```bash
+   lark-cli docs +create \
+     --title "AI × 开发 × Agent 周报 | {monday_date}" \
+     --wiki-space my_library \
+     --markdown '{lark_flavored_content}'
+   ```
+4. If digest already exists for this week → **Follow user decision** (overwrite / append / skip), made in Step 0b
+5. Confirm the Feishu doc URL to the user
+
+> See `references/lark-integration.md` for full Feishu integration details, error handling, and Lark-flavored Markdown enhancement rules.
 
 **Follow-up Options** (offer after saving):
 1. **深挖** — Choose a specific news item for deeper analysis
 2. **对比** — Compare 2-3 projects/frameworks
 3. **搜索** — Deep-search a specific topic
-4. **分享** — Save to Feishu docs or send to Feishu group
+4. **更新飞书** — Re-push or update the digest to Feishu
 
 ---
 
@@ -227,10 +264,13 @@ Every item must also include 👍 (值得点) and 👎 (需注意) with verifiab
 - Scoring formula: frequency × 0.25 + quality × 0.30 + recency × 0.20 + cross_validation × 0.25
 
 ### Memory Rules
-- ALWAYS read all existing `ai-digest-*.md` files before starting
+- ALWAYS read all existing `ai-digest-*.md` files AND search Feishu personal library before starting
 - NEVER repeat a topic from a previous digest unless there is significant new development
 - For recurring topics, use 🔄 Update format referencing the prior digest date
 - Match topics by project name, key phrase, or URL domain — not just exact title match
+- If same topic exists in both local and Feishu sources, merge into single Coverage Memory entry
+- Feishu documents take priority as source of truth for "published" content
+- If Feishu operations fail, fall back to local-only mode
 
 ### Commentary Rules
 - **Have a stance** — NEVER write "既有机遇也有挑战"
@@ -260,3 +300,4 @@ Detailed specifications are split into reference files under `references/`:
 | [`references/scoring-algorithm.md`](references/scoring-algorithm.md) | Composite score formula, dimension weights, topic selection thresholds, deduplication rules |
 | [`references/commentary-style.md`](references/commentary-style.md) | 5-section commentary template, update format, mandatory commentary rules |
 | [`references/output-template.md`](references/output-template.md) | Complete Markdown output template, update format, file saving rules, follow-up options |
+| [`references/lark-integration.md`](references/lark-integration.md) | Feishu integration: document naming, search/create/update commands, Lark-flavored Markdown enhancements, error handling |
